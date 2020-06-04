@@ -33,7 +33,7 @@
 
     color: #fff;
 
-    background-color: #316b4e;
+    background-color: #cb375a;
 }
 
 .doMainBtn {
@@ -53,6 +53,15 @@
     background-color: #cb375a;
 }
 
+.backBtn {
+    padding: 15px 30px;
+    margin-left: 15px;
+
+    color: #fff;
+
+    background-color: #316b4e;
+}
+
 @media (max-width: 600px) {
     .undoMainBtn {
         margin-left: 0;
@@ -60,6 +69,11 @@
     }
 
     .goBtn {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+
+    .backBtn {
         margin-left: 0;
         margin-top: 10px;
     }

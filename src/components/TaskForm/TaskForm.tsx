@@ -292,7 +292,14 @@ export class TaskForm extends Component <Props, State> {
           {
             this.props.editMode
             &&
-            <button className={styles.goBtn} onClick={this.udoChanges}>Отменить изменения</button>
+            <>
+              <button className={styles.goBtn} onClick={this.udoChanges}>Отменить изменения</button>
+              <Link to="/">
+                <button className={styles.backBtn}>Вернуться</button>
+              </Link>
+            </>
+
+
           }
 
         </form>

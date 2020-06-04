@@ -23,6 +23,15 @@
     background-color: #0067d4;
 }
 
+.backBtn {
+    padding: 10px 20px;
+    margin-top: 25px;
+
+    color: #fff;
+
+    background-color: #316b4e;
+}
+
 @media (max-width: 800px) {
     .container {
         width: 350px;

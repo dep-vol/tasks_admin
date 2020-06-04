@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {FormSaveData} from "../../types";
 import styles from "./EditTaskForm.module.css";
 import {TaskForm} from "../TaskForm/TaskForm";
+import {Link} from "react-router-dom";
 
 type State = {
   tasks: FormSaveData[];
@@ -113,6 +114,9 @@ export class EditTaskForm extends Component<Props, State> {
                 </div>
               );
             })}
+            <Link to="/">
+              <button className={styles.backBtn}>Вернуться</button>
+            </Link>
           </div>
         );
       } else {
