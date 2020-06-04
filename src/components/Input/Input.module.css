@@ -15,3 +15,7 @@
 .teacherLabel {
     display: inline-block;
 }
+
+.edited {
+    outline: 1px solid red;
+}

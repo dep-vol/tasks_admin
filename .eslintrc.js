@@ -6,7 +6,8 @@ module.exports = {
     "extends": [
         "eslint:recommended",
         "plugin:react/recommended",
-        "plugin:@typescript-eslint/eslint-recommended"
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -37,6 +38,7 @@ module.exports = {
             "error",
             "always"
         ],
-        "react/prop-types": 0
+        "react/prop-types": 0,
+        "@typescript-eslint/explicit-function-return-type": 0
     }
 };

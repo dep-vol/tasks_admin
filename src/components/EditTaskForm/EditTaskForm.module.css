@@ -1,0 +1,23 @@
+.container {
+    width: 750px;
+}
+
+.taskContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.taskContainer p {
+    line-break: anywhere;
+}
+
+.submitBtn {
+    padding: 10px 20px;
+    margin-left: 25px;
+
+    color: #fff;
+
+    background-color: #0067d4;
+}

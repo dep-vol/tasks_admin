@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import styles from "./Input.module.css";
 
 type Props = {
@@ -7,11 +7,49 @@ type Props = {
   name: string;
   inputId?: number;
   changeHandle?: (value: any, type: any, inputId?: number) => void;
+  isCleared?: boolean;
+  defaultValue: string | boolean;
+  editMode?: boolean;
+  isUndo?: boolean;
 }
 
-export const Input: React.FC<Props> = ({ label, type, name, inputId, changeHandle }) => {
+export const Input: React.FC<Props> = (
+  {
+    label,
+    type,
+    name,
+    inputId,
+    changeHandle,
+    isCleared,
+    defaultValue,
+    editMode,
+    isUndo
+  }) => {
 
-  const [inputState, setInputState] = useState<{isChecked: boolean, [k:string]: any}>({isChecked: false, [name]: ""});
+  const [inputState, setInputState] = useState({[name]: defaultValue});
+
+  const [editedClassName, setEditedClassName] = useState("");
+
+
+  useEffect(() => {
+
+    if(editMode) {
+      setInputState((prevState => ({...prevState, [name]: defaultValue })));
+      if(isUndo) {
+        setEditedClassName("");
+      }
+    }
+
+    if(isCleared) {
+      if (name === "isChecked") {
+        setInputState({[name]: false});
+      }
+      else {
+        setInputState({[name]: ""});
+      }
+    }
+  }, [isCleared, name, defaultValue, editMode, isUndo]);
+
 
   const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
 
@@ -23,13 +61,18 @@ export const Input: React.FC<Props> = ({ label, type, name, inputId, changeHandl
       ...prevState, [target.name] : value
     }));
 
+    if(editMode && !isUndo) {
+      setEditedClassName("edited");
+    }
+
     changeHandle && changeHandle(value, name, inputId);
 
-  }, []);
+  }, [changeHandle, inputId, name, editMode]);
 
   const attr = type === "checkbox"
-    ? {className: styles.checkInput, type, name: name, checked: inputState.isChecked}
-    : {className: styles.textInput, type, name: name, value: inputState[name]};
+    ? {className: `${styles.checkInput} ${styles[editedClassName]}`, type, name, checked: !!inputState[name]}
+    : {className: `${styles.textInput} ${styles[editedClassName]}`, type, name, value: inputState[name].toString()};
+
 
   return (
     <div className={styles.container}>
