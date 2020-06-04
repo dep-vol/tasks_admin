@@ -71,7 +71,6 @@ export class EditTaskForm extends Component<Props, State> {
             this.state.tasks.length
           );
 
-      console.log(editedTasksBefore, editedTasksAfter);
       this.setState(() => ({
         tasks: [...editedTasksBefore, {...data}, ...editedTasksAfter],
         isSaved: true,
