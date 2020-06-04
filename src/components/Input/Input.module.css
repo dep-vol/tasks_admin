@@ -19,3 +19,11 @@
 .edited {
     outline: 1px solid red;
 }
+
+@media (max-width: 600px) {
+    .textInput {
+        margin: 15px 0;
+        padding: 10px;
+        width: 200px;
+    }
+}

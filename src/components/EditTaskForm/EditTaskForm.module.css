@@ -1,3 +1,4 @@
+
 .container {
     width: 750px;
 }
@@ -20,4 +21,10 @@
     color: #fff;
 
     background-color: #0067d4;
+}
+
+@media (max-width: 800px) {
+    .container {
+        width: 350px;
+    }
 }

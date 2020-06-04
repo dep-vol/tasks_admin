@@ -52,3 +52,15 @@
 
     background-color: #cb375a;
 }
+
+@media (max-width: 600px) {
+    .undoMainBtn {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+
+    .goBtn {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+}

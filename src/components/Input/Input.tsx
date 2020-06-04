@@ -1,12 +1,13 @@
 import React, {useCallback, useEffect, useState} from "react";
 import styles from "./Input.module.css";
+import {ChangeHandleTypes, HandleSwitchTypes} from "../../types";
 
 type Props = {
   label: string;
   type: "text" | "checkbox";
-  name: string;
+  name: HandleSwitchTypes;
   inputId?: number;
-  changeHandle?: (value: any, type: any, inputId?: number) => void;
+  changeHandle?: ChangeHandleTypes;
   isCleared?: boolean;
   defaultValue: string | boolean;
   editMode?: boolean;
@@ -30,7 +31,10 @@ export const Input: React.FC<Props> = (
 
   const [editedClassName, setEditedClassName] = useState("");
 
-
+  /**
+   ** If edit mode reload inputs values from default with props
+   ** If cleared clean inputs
+   **/
   useEffect(() => {
 
     if(editMode) {
@@ -67,7 +71,7 @@ export const Input: React.FC<Props> = (
 
     changeHandle && changeHandle(value, name, inputId);
 
-  }, [changeHandle, inputId, name, editMode]);
+  }, [changeHandle, inputId, name, editMode, isUndo]);
 
   const attr = type === "checkbox"
     ? {className: `${styles.checkInput} ${styles[editedClassName]}`, type, name, checked: !!inputState[name]}

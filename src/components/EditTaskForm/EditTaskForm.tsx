@@ -9,10 +9,11 @@ type State = {
   editedTask: FormSaveData;
   editedTaskIndex: number | null;
   isSaved: boolean;
-}
-type Props = {}
+};
+type Props = {};
 
 export class EditTaskForm extends Component<Props, State> {
+
   constructor(props: Props) {
     super(props);
 
@@ -21,58 +22,73 @@ export class EditTaskForm extends Component<Props, State> {
       isEditActive: false,
       editedTask: {description: "", answers: [], teachers: []},
       editedTaskIndex: null,
-      isSaved: false
+      isSaved: false,
     };
   }
 
+  // Set task to state from local storage on mount
   componentDidMount() {
     const storedTasks = localStorage.getItem("tasks");
     if (storedTasks != null) {
-      this.setState((prevState) => ({...prevState, tasks: JSON.parse(storedTasks)}));
+      this.setState((prevState) => ({
+        ...prevState,
+        tasks: JSON.parse(storedTasks),
+      }));
     }
   }
-
-  componentDidUpdate(prevProps: Props, prevState:State) {
+  //If have success changes save to storage
+  componentDidUpdate(prevProps: Props, prevState: State) {
     if (this.state.tasks !== prevState.tasks) {
       localStorage.setItem("tasks", JSON.stringify(this.state.tasks));
     }
   }
-
+  //If selected item to change save it and it`s index to store. Make edited status
   switchEditState = (index: number) => {
     this.setState((prevState) => ({
-      ...prevState, isEditActive: !prevState.isEditActive, editedTask: {...prevState.tasks[index]}, editedTaskIndex: index
+      ...prevState,
+      isEditActive: !prevState.isEditActive,
+      editedTask: {...prevState.tasks[index]},
+      editedTaskIndex: index,
     }));
-  }
+  };
 
   handleSubmit = (event: React.FormEvent, data: FormSaveData) => {
     event.preventDefault();
-    if(this.state.editedTaskIndex) {
-      const editedTasksBefore = this.state.tasks.slice(0, this.state.editedTaskIndex);
-      const editedTasksAfter = this.state.tasks.slice(this.state.editedTaskIndex+1, this.state.tasks.length);
 
-      this.setState((prevState) => ({
+    if (this.state.editedTaskIndex !== null) {
+      const editedTasksBefore = this.state.tasks.length === 1
+        ? []
+        : this.state.tasks.slice(
+          0,
+          this.state.editedTaskIndex
+        );
+      const editedTasksAfter =
+        this.state.tasks.length <= this.state.editedTaskIndex + 1
+          ? []
+          : this.state.tasks.slice(
+            this.state.editedTaskIndex + 1,
+            this.state.tasks.length
+          );
+
+      console.log(editedTasksBefore, editedTasksAfter);
+      this.setState(() => ({
         tasks: [...editedTasksBefore, {...data}, ...editedTasksAfter],
-        isSaved: true
+        isSaved: true,
       }));
 
       console.log(data);
-    }
-    else {
+    } else {
       throw new Error("Error with index of edited task");
     }
-
-
-
-
-  }
-
+  };
 
   render() {
-
     if (this.state.tasks.length === 0) {
-      return <div>
-        <h2>Список задач пуст!</h2>
-      </div>;
+      return (
+        <div>
+          <h2>Список задач пуст!</h2>
+        </div>
+      );
     } else {
       if (!this.state.isEditActive) {
         return (
@@ -80,9 +96,20 @@ export class EditTaskForm extends Component<Props, State> {
             <h2>Список задач:</h2>
             {this.state.tasks.map((task, i) => {
               return (
-                <div className={styles.taskContainer} key={i + `${task.description}`}>
-                  <p> {i + 1}. {task.description}</p>
-                  <button className={styles.submitBtn} onClick={() => this.switchEditState(i)}>Отредактировать</button>
+                <div
+                  className={styles.taskContainer}
+                  key={i + `${task.description}`}
+                >
+                  <p>
+                    {" "}
+                    {i + 1}. {task.description}
+                  </p>
+                  <button
+                    className={styles.submitBtn}
+                    onClick={() => this.switchEditState(i)}
+                  >
+                    Отредактировать
+                  </button>
                 </div>
               );
             })}
@@ -94,16 +121,17 @@ export class EditTaskForm extends Component<Props, State> {
             <TaskForm
               editMode={true}
               handleSubmit={this.handleSubmit}
-              teachers={["Иванов И.И.", "Жуков Д.К.", "Петров И.И.", "Сидоров А.А."]}
+              teachers={[
+                "Иванов И.И.",
+                "Жуков Д.К.",
+                "Петров И.И.",
+                "Сидоров А.А.",
+              ]}
               data={this.state.editedTask}
             />
           </div>
         );
       }
-
     }
-
   }
-
-
 }

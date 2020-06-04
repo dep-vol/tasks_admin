@@ -2,7 +2,8 @@ import React, {Component} from "react";
 import {Input} from "../Input/Input";
 import styles from "./TaskForm.module.css";
 import {Link} from "react-router-dom";
-import {FormSaveData} from "../../types";
+import {ChangeHandleTypes, FormSaveData} from "../../types";
+
 
 type Props = {
   editMode: boolean;
@@ -30,15 +31,15 @@ export class TaskForm extends Component <Props, State> {
     };
   }
 
+  //Set to store prop data
   componentDidMount() {
-
     this.setState((prevState) => ({
       ...prevState, data: {...prevState.data, ...this.props.data}
     }));
-
   }
 
-  componentDidUpdate(prevProps: Props, prevState: State) {
+  //Check for undo changes for recycle process
+  componentDidUpdate(prevProps: Props) {
 
     if (prevProps.isSaved !== this.props.isSaved) {
       this.setState((prevState) => ({
@@ -71,40 +72,49 @@ export class TaskForm extends Component <Props, State> {
     }));
   }
 
-  changeHandle = (value: any, type: any, inputId?: number) => {
+  //Process change handlers by different input types
+  changeHandle: ChangeHandleTypes = (value, type, inputId) => {
     switch (type) {
     case "description" : {
-      this.setState((prevState) => ({
-        ...prevState, data: {...prevState.data, description: value}
-      }));
+      if(typeof (value) === "string") {
+        this.setState((prevState) => ({
+          ...prevState, data: {...prevState.data, description: value}
+        }));
+      }
+      else {
+        throw new Error("Error with value type");
+      }
       break;
     }
     case "answer": {
-      this.setState((prevState) => {
-        if (inputId !== undefined) {
-          //Check message by inputId and if we have it - change only this message else add new message
-          const answer = prevState.data.answers[inputId];
+      if(typeof (value) === "string") {
+        this.setState((prevState) => {
+          if (inputId !== undefined) {
+            //Check message by inputId and if we have it - change only this message else add new message
+            const answer = prevState.data.answers[inputId];
 
-          if (answer) {
-            return {
-              ...prevState, data: {
-                ...prevState.data, answers: prevState.data.answers.map((answer, i) => {
-                  return i === inputId ? {...answer, text: value} : answer;
-                })
-              }
-            };
+            if (answer) {
+              return {
+                ...prevState, data: {
+                  ...prevState.data, answers: prevState.data.answers.map((answer, i) => {
+                    return i === inputId ? {...answer, text: value} : answer;
+                  })
+                }
+              };
+            } else {
+              return {
+                ...prevState, data: {
+                  ...prevState.data, answers: [...prevState.data.answers, {text: value}]
+                }
+              };
+            }
+
           } else {
-            return {
-              ...prevState, data: {
-                ...prevState.data, answers: [...prevState.data.answers, {text: value}]
-              }
-            };
+            throw new Error("Input id is undefined");
           }
+        });
+      }
 
-        } else {
-          throw new Error("Input id is undefined");
-        }
-      });
       break;
     }
 
@@ -131,6 +141,7 @@ export class TaskForm extends Component <Props, State> {
     }
   }
 
+  //Check for submit disable
   checkSubmit = () => {
     return (this.state.data.description !== "")
       && (this.state.data.answers.length > 0)
@@ -139,12 +150,11 @@ export class TaskForm extends Component <Props, State> {
   }
 
   udoChanges = () => {
-
     this.setState((prevState) => ({
       ...prevState, data: {...this.props.data}, isUndo: true
     }));
-
   }
+  //Add main attr to answer
   changeMainAnswer = (e: React.FormEvent, el: { main?: boolean; text: string }, type: string) => {
     e.preventDefault();
     const newAnswers = this.state.data.answers.map((answer) => {
@@ -169,6 +179,7 @@ export class TaskForm extends Component <Props, State> {
     ;
   }
 
+  //Check for disabling making main button
   checkMainChoosed = () => {
     return this.state.data.answers.some(answer => answer.main || answer.text === "");
   }
@@ -290,5 +301,5 @@ export class TaskForm extends Component <Props, State> {
   }
 
 
-};
+}
 

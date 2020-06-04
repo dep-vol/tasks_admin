@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import {FormSaveData} from "../../types";
 import {TaskForm} from "../TaskForm/TaskForm";
 
-
 type State = {
   tasks: FormSaveData [];
   isSaved: boolean;
@@ -25,6 +24,7 @@ export class AddTaskForm extends Component<Props, State> {
     answers: []
   }
 
+  //Fetch Data from local storage while mount
   componentDidMount() {
     const tasksFromStorage = localStorage.getItem("tasks");
 
@@ -38,6 +38,7 @@ export class AddTaskForm extends Component<Props, State> {
 
   }
 
+  //If have success changes save to storage and recycle save flow
   componentDidUpdate(prevProps: Props, prevState: State) {
     if (this.state.tasks !== prevState.tasks) {
       localStorage.setItem("tasks", JSON.stringify(this.state.tasks));
@@ -48,7 +49,6 @@ export class AddTaskForm extends Component<Props, State> {
     }
 
   }
-
 
   handleSubmit = (event: React.FormEvent, data: FormSaveData) => {
     event.preventDefault();
@@ -72,6 +72,6 @@ export class AddTaskForm extends Component<Props, State> {
         data={this.data}
         isSaved={this.state.isSaved}
       />
-    )
+    );
   }
 }
